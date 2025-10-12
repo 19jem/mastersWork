@@ -25,6 +25,6 @@ import { MongooseModule } from '@nestjs/mongoose';
     UsersModule, AuthModule, AdminModule, CartModule, CategoriesModule, OrdersModule, ProductsModule,
     MongooseModule.forRoot(process.env.MONGODB_URI ?? 'mongodb://localhost:27017/master')],
   controllers: [AppController, AdminController, CategoriesController, ProductsController],
-  providers: [AppService, AuthService, ProductsService, CategoriesService, CartService, OrdersService, AdminService],
+  providers: [AppService, AuthService, ProductsService, CategoriesService, CartService, OrdersService, AdminService, AuthModule],
 })
 export class AppModule {}
