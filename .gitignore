@@ -1,0 +1,80 @@
+# === MONOREPO IGNORE FILE (Eshop) ===
+# Працює для всього проєкту: бекенд (NestJS) + майбутній фронтенд (Vite/Vue/React)
+
+# --- Compiled output / build artifacts ---
+**/dist/
+**/build/
+**/.next/
+**/.nuxt/
+**/.vite/
+**/.cache/
+**/.angular/
+**/storybook-static/
+**/.parcel-cache/
+**/coverage/
+**/.nyc_output/
+*.tsbuildinfo
+
+# --- Dependencies ---
+**/node_modules/
+
+# --- Logs ---
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# --- Temporary files ---
+.temp/
+.tmp/
+*.tmp
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# --- Diagnostic reports (https://nodejs.org/api/report.html) ---
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# --- Environment / dotenv files ---
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.local
+
+# --- IDEs and editors ---
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# --- OS generated files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Tests ---
+**/coverage/
+**/.nyc_output/
+
+# --- Frontend build (майбутній Vite/React/Vue) ---
+**/eshop-frontend/dist/
+**/eshop-frontend/.vite/
+**/eshop-frontend/node_modules/
+
+# --- Misc ---
+*.swp
