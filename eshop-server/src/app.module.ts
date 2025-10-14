@@ -22,9 +22,27 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), // читає .env
-    UsersModule, AuthModule, AdminModule, CartModule, CategoriesModule, OrdersModule, ProductsModule,
+    UsersModule, 
+    AuthModule, 
+    AdminModule, 
+    CartModule, 
+    CategoriesModule, 
+    OrdersModule, 
+    ProductsModule, 
     MongooseModule.forRoot(process.env.MONGODB_URI ?? 'mongodb://localhost:27017/master')],
-  controllers: [AppController, AdminController, CategoriesController, ProductsController],
-  providers: [AppService, AuthService, ProductsService, CategoriesService, CartService, OrdersService, AdminService, AuthModule],
+  controllers: [
+    AppController, 
+    AdminController, 
+    CategoriesController, 
+    ProductsController
+  ],
+  providers: [
+    AppService, 
+    AuthService,  
+    CategoriesService,
+    CartService, 
+    OrdersService, 
+    AdminService
+  ],
 })
 export class AppModule {}
