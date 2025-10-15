@@ -20,6 +20,6 @@ export class CreateProductDto {
   imageUrl?: string;
 
   @IsOptional()
-  @IsArray()
-  categories?: string[];
+  @IsString()
+  category?: string;
 }

@@ -13,6 +13,6 @@ async function bootstrap() {
     transform: true,
   }));
   await app.listen(process.env.PORT ?? 3000);
-  console.log('JWT_SECRET:', process.env.JWT_SECRET);
+  console.log(process.env.PORT);
 }
 bootstrap();

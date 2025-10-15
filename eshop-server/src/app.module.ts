@@ -37,9 +37,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   ],
   providers: [
     AppService, 
-    AuthService,  
-    CartService, 
-    OrdersService, 
+    AuthService,   
     AdminService
   ],
 })

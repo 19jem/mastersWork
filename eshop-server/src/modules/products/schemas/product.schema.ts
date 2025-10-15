@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Product {
+  _id = Types.ObjectId;
   @Prop({ required: true })
   name: string;
 
@@ -18,8 +19,11 @@ export class Product {
   @Prop()
   imageUrl: string;
 
-  @Prop({ type: [String], default: [] })
-  categories: string[];
+  @Prop({ type: String, ref: 'Category', required: true })
+  category: string;
+
+  // Додати виробника
+
 }
 
 export type ProductDocument = HydratedDocument<Product>;

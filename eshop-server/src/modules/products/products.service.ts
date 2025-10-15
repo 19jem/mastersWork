@@ -14,14 +14,14 @@ export class ProductsService {
   }
 
   async findAll(): Promise<Product[]> {
-    return this.productModel.find().lean();
-  }
+  return this.productModel.find().populate('category').lean();
+}
 
   async findOne(id: string): Promise<Product> {
-    const product = await this.productModel.findById(id).lean();
-    if (!product) throw new NotFoundException('Product not found');
-    return product;
-  }
+  const product = await this.productModel.findById(id).populate('category').lean();
+  if (!product) throw new NotFoundException('Product not found');
+  return product;
+}
 
   async update(id: string, dto: UpdateProductDto): Promise<Product> {
     const updated = await this.productModel.findByIdAndUpdate(id, dto, { new: true }).lean();
