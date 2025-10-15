@@ -4,8 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './modules/auth/auth.service';
-import { ProductsService } from './modules/products/products.service';
-import { CategoriesService } from './modules/categories/categories.service';
+
 import { CartService } from './modules/cart/cart.service';
 import { OrdersService } from './modules/orders/orders.service';
 import { AdminService } from './modules/admin/admin.service';
@@ -39,7 +38,6 @@ import { MongooseModule } from '@nestjs/mongoose';
   providers: [
     AppService, 
     AuthService,  
-    CategoriesService,
     CartService, 
     OrdersService, 
     AdminService
