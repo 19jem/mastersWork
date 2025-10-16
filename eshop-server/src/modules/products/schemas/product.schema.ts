@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import * as mongoose from 'mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
@@ -19,8 +20,9 @@ export class Product {
   @Prop()
   imageUrl: string;
 
-  @Prop({ type: String, ref: 'Category', required: true })
-  category: string;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true })
+  category: mongoose.Types.ObjectId;
+
 
   // Додати виробника
 
