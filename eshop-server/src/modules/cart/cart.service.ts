@@ -5,13 +5,11 @@ import { Cart, CartDocument } from './schemas/cart.schema';
 import { AddItemDto } from './dtos/add-item.dto';
 import { Product } from '../products/schemas/product.schema';
 
-// 🔹 для чистої типізації
 interface CartItem {
   product: string | Product;
   quantity: number;
 }
 
-// допоміжна утиліта для безпечного отримання _id
 function getProductId(p: string | Product): string {
   if (typeof p === 'string') return p;
   return p._id?.toString?.() || '';

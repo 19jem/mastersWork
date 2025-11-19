@@ -1,27 +1,37 @@
+import { ObjectType, Field, ID, Float } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 
 @Schema({ timestamps: true })
+@ObjectType()
 export class Product {
-  _id = Types.ObjectId;
+  @Field(() => ID)
+  _id: string;
+
+  @Field()
   @Prop({ required: true })
   name: string;
 
+  @Field()
   @Prop({ required: true })
   description: string;
 
+  @Field()
   @Prop({ required: true })
   price: number;
 
+  @Field()
   @Prop({ default: 0 })
   stock: number;
 
+  @Field()
   @Prop()
   imageUrl: string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true })
-  category: mongoose.Types.ObjectId;
+  @Field(() => String)
+  @Prop({ type: String, ref: 'Category', required: true })
+  category: String;
 
 
   // Додати виробника

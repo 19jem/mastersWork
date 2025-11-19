@@ -34,7 +34,6 @@ export class CategoriesService {
     if (!deleted) throw new NotFoundException('Category not found');
   }
 
-  // 🔹 додаткові методи для зручності фронту
   async findMain(): Promise<Category[]> {
     return this.categoryModel.find({ parent: null }).lean();
   }

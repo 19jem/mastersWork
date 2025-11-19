@@ -4,9 +4,6 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthService } from './modules/auth/auth.service';
-
-import { CartService } from './modules/cart/cart.service';
-import { OrdersService } from './modules/orders/orders.service';
 import { AdminService } from './modules/admin/admin.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { AdminController } from './modules/admin/admin.controller';
@@ -18,6 +15,9 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { ProductsController } from './modules/products/products.controller';
 import { ProductsModule } from './modules/products/products.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }), // читає .env
@@ -28,7 +28,14 @@ import { MongooseModule } from '@nestjs/mongoose';
     CategoriesModule, 
     OrdersModule, 
     ProductsModule, 
-    MongooseModule.forRoot(process.env.MONGODB_URI ?? 'mongodb://localhost:27017/master')],
+    MongooseModule.forRoot(process.env.MONGODB_URI ?? 'mongodb://localhost:27017/master'),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/schema.gql'), 
+      playground: true, 
+      sortSchema: true,
+    }),
+  ],
   controllers: [
     AppController, 
     AdminController, 
