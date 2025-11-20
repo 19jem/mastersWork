@@ -1,4 +1,3 @@
-// src/modules/products/products.resolver.ts
 import { Resolver, Query, Mutation, Args, ResolveField, Parent } from "@nestjs/graphql";
 import { ProductsService } from "./products.service";
 import { ProductType } from "./types/product.type";
@@ -15,9 +14,6 @@ export class ProductsResolver {
     private readonly categoriesService: CategoriesService,
   ) {}
 
-  // ========================
-  //         QUERIES
-  // ========================
   @Query(() => [ProductType], { name: "products" })
   async getProducts() {
     return this.productsService.findAll();
@@ -28,9 +24,6 @@ export class ProductsResolver {
     return this.productsService.findOne(id);
   }
 
-  // ========================
-  //       MUTATIONS
-  // ========================
   @Mutation(() => ProductType)
   async createProduct(@Args("input") input: CreateProductDto) {
     return this.productsService.create(input);
@@ -50,20 +43,15 @@ export class ProductsResolver {
     return true;
   }
 
-  // =========================================
-  //        RESOLVE FIELD: category
-  //  Повертаємо CategoryType, а не String
-  // =========================================
+
   @ResolveField(() => CategoryType, { name: "category" })
   async resolveCategory(@Parent() product: Product & { category?: any }) {
     const cat = product.category;
 
-    // 1️⃣ Якщо populate повернув об’єкт:
     if (cat && typeof cat === "object" && "_id" in cat) {
       return cat;
     }
 
-    // 2️⃣ Якщо рядок або ObjectId
     const categoryId =
       typeof cat === "string"
         ? cat
@@ -73,7 +61,6 @@ export class ProductsResolver {
 
     if (!categoryId) return null;
 
-    // 3️⃣ Отримуємо категорію з БД
     return this.categoriesService.findOne(categoryId);
   }
 }

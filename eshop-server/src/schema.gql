@@ -4,8 +4,17 @@
 
 type CategoryType {
   _id: ID!
+  children: [CategoryType!]!
   description: String
   name: String!
+  parent: ID
+  parentCategory: CategoryType
+}
+
+input CreateCategoryInput {
+  description: String
+  name: String!
+  parent: ID
 }
 
 input CreateProductDto {
@@ -18,8 +27,16 @@ input CreateProductDto {
 }
 
 type Mutation {
+  """Створити нову категорію"""
+  createCategory(input: CreateCategoryInput!): CategoryType!
   createProduct(input: CreateProductDto!): ProductType!
+
+  """Видалити категорію"""
+  deleteCategory(id: ID!): Boolean!
   deleteProduct(id: String!): Boolean!
+
+  """Оновити категорію"""
+  updateCategory(id: ID!, input: UpdateCategoryInput!): CategoryType!
   updateProduct(id: String!, input: UpdateProductDto!): ProductType!
 }
 
@@ -34,8 +51,25 @@ type ProductType {
 }
 
 type Query {
+  """Отримати всі категорії"""
+  categories: [CategoryType!]!
+
+  """Отримати категорію за ID"""
+  category(id: ID!): CategoryType!
+
+  """Отримати дочірні категорії"""
+  childCategories(parentId: ID!): [CategoryType!]!
+
+  """Отримати головні категорії (без parent)"""
+  mainCategories: [CategoryType!]!
   product(id: String!): ProductType!
   products: [ProductType!]!
+}
+
+input UpdateCategoryInput {
+  description: String
+  name: String
+  parent: ID
 }
 
 input UpdateProductDto {
