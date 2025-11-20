@@ -1,25 +1,29 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Cart, CartDocument } from './schemas/cart.schema';
 import { AddItemDto } from './dtos/add-item.dto';
-import { Product } from '../products/schemas/product.schema';
+import { Product, ProductDocument } from '../products/schemas/product.schema';
 
 interface CartItem {
-  product: string | Product;
+  product: Types.ObjectId | ProductDocument;
   quantity: number;
 }
 
-function getProductId(p: string | Product): string {
+// --- Найважливіша функція ---
+function getProductId(
+  p: Types.ObjectId | ProductDocument | string
+): string {
   if (typeof p === 'string') return p;
-  return p._id?.toString?.() || '';
+  if (p instanceof Types.ObjectId) return p.toString();
+  return p._id.toString();
 }
 
 @Injectable()
 export class CartService {
   constructor(
     @InjectModel(Cart.name) private cartModel: Model<CartDocument>,
-    @InjectModel(Product.name) private productModel: Model<Product>,
+    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
   ) {}
 
   async getCart(userId: string): Promise<Cart> {
@@ -36,7 +40,7 @@ export class CartService {
 
     if (dto.quantity > product.stock) {
       throw new BadRequestException(
-        `Немає такої кількості товару "${product.name}". У наявності лише ${product.stock}.`,
+        `Немає такої кількості товару "${product.name}". Доступно ${product.stock}.`,
       );
     }
 
@@ -45,7 +49,9 @@ export class CartService {
       cart = await this.cartModel.create({ userId, items: [], totalPrice: 0 });
     }
 
-    const existing = cart.items.find(i => getProductId(i.product) === dto.product);
+    const existing = cart.items.find(
+      i => getProductId(i.product) === dto.product
+    );
 
     if (existing) {
       const newQty = existing.quantity + dto.quantity;
@@ -56,10 +62,14 @@ export class CartService {
       }
       existing.quantity = newQty;
     } else {
-      cart.items.push({ product: dto.product, quantity: dto.quantity });
+      // --- найважливіша зміна ---
+      cart.items.push({
+        product: new Types.ObjectId(dto.product),
+        quantity: dto.quantity,
+      });
     }
 
-    cart.totalPrice = await this.calculateTotal(cart.items as CartItem[]);
+    cart.totalPrice = await this.calculateTotal(cart.items);
     await cart.save();
     return cart.populate('items.product');
   }
@@ -86,7 +96,7 @@ export class CartService {
 
     item.quantity = quantity;
 
-    cart.totalPrice = await this.calculateTotal(cart.items as CartItem[]);
+    cart.totalPrice = await this.calculateTotal(cart.items);
     await cart.save();
     return cart.populate('items.product');
   }
@@ -96,18 +106,22 @@ export class CartService {
     if (!cart) throw new NotFoundException('Cart not found');
 
     cart.items = cart.items.filter(i => getProductId(i.product) !== productId);
-    cart.totalPrice = await this.calculateTotal(cart.items as CartItem[]);
+
+    cart.totalPrice = await this.calculateTotal(cart.items);
     await cart.save();
     return cart.populate('items.product');
   }
 
   async clearCart(userId: string): Promise<void> {
-    await this.cartModel.findOneAndUpdate({ userId }, { items: [], totalPrice: 0 });
+    await this.cartModel.findOneAndUpdate(
+      { userId },
+      { items: [], totalPrice: 0 },
+    );
   }
 
   private async calculateTotal(items: CartItem[]): Promise<number> {
     const ids = items.map(i => getProductId(i.product));
-    const products = await this.productModel.find({ _id: { $in: ids } }).lean();
+    const products = await this.productModel.find({ _id: { $in: ids } });
 
     return items.reduce((sum, i) => {
       const pid = getProductId(i.product);

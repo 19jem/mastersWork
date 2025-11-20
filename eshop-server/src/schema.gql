@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type CategoryType {
+  _id: ID!
+  description: String
+  name: String!
+}
+
 input CreateProductDto {
   category: String
   description: String!
@@ -12,24 +18,24 @@ input CreateProductDto {
 }
 
 type Mutation {
-  createProduct(input: CreateProductDto!): Product!
+  createProduct(input: CreateProductDto!): ProductType!
   deleteProduct(id: String!): Boolean!
-  updateProduct(id: String!, input: UpdateProductDto!): Product!
+  updateProduct(id: String!, input: UpdateProductDto!): ProductType!
 }
 
-type Product {
+type ProductType {
   _id: ID!
-  category: String!
+  category: CategoryType!
   description: String!
-  imageUrl: String!
+  imageUrl: String
   name: String!
   price: Float!
   stock: Float!
 }
 
 type Query {
-  product(id: String!): [Product!]!
-  products: [Product!]!
+  product(id: String!): ProductType!
+  products: [ProductType!]!
 }
 
 input UpdateProductDto {

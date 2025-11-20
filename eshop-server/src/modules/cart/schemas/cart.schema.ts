@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import { Product } from 'src/modules/products/schemas/product.schema';
+import { HydratedDocument, Types } from 'mongoose';
+import { Product, ProductDocument } from 'src/modules/products/schemas/product.schema';
 
 @Schema({ timestamps: true })
 export class Cart {
@@ -10,17 +10,20 @@ export class Cart {
   @Prop({
     type: [
       {
-        product: { type: String, ref: 'Product', required: true },
+        product: { type: Types.ObjectId, ref: 'Product', required: true },
         quantity: { type: Number, required: true, default: 1 },
       },
     ],
     default: [],
   })
-  items: { product: string | Product; quantity: number }[];
+  items: {
+    product: Types.ObjectId | ProductDocument; // <-- правильний тип для populate
+    quantity: number;
+  }[];
 
   @Prop({ default: 0 })
   totalPrice: number;
 }
 
-export type CartDocument = HydratedDocument<Cart>
+export type CartDocument = HydratedDocument<Cart>;
 export const CartSchema = SchemaFactory.createForClass(Cart);
