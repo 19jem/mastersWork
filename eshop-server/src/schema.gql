@@ -26,18 +26,38 @@ input CreateProductDto {
   stock: Float
 }
 
+input CreateUserInput {
+  email: String!
+  name: String!
+  password: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Mutation {
   """Створити нову категорію"""
   createCategory(input: CreateCategoryInput!): CategoryType!
   createProduct(input: CreateProductDto!): ProductType!
 
+  """Створити нового користувача"""
+  createUser(input: CreateUserInput!): UserType!
+
   """Видалити категорію"""
   deleteCategory(id: ID!): Boolean!
   deleteProduct(id: String!): Boolean!
 
+  """Видалити користувача"""
+  deleteUser(id: ID!): Boolean!
+
   """Оновити категорію"""
   updateCategory(id: ID!, input: UpdateCategoryInput!): CategoryType!
   updateProduct(id: String!, input: UpdateProductDto!): ProductType!
+
+  """Оновити користувача"""
+  updateUser(id: ID!, input: UpdateUserInput!): UserType!
 }
 
 type ProductType {
@@ -64,6 +84,12 @@ type Query {
   mainCategories: [CategoryType!]!
   product(id: String!): ProductType!
   products: [ProductType!]!
+
+  """Отримати користувача за ID"""
+  user(id: ID!): UserType!
+
+  """Отримати всіх користувачів"""
+  users: [UserType!]!
 }
 
 input UpdateCategoryInput {
@@ -79,4 +105,19 @@ input UpdateProductDto {
   name: String
   price: Float
   stock: Float
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  password: String
+}
+
+type UserType {
+  _id: ID!
+  createdAt: DateTime!
+  email: String!
+  name: String!
+  password: String
+  updatedAt: DateTime!
 }
