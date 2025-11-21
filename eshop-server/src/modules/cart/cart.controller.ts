@@ -20,13 +20,16 @@ export class CartController {
   updateItem(
     @Param('userId') userId: string,
     @Param('productId') productId: string,
-    @Query('quantity') quantity: number,
+    @Query('quantity') quantity: string,
   ) {
     return this.cartService.updateItem(userId, productId, Number(quantity));
   }
 
   @Delete(':userId/:productId')
-  removeItem(@Param('userId') userId: string, @Param('productId') productId: string) {
+  removeItem(
+    @Param('userId') userId: string,
+    @Param('productId') productId: string,
+  ) {
     return this.cartService.removeItem(userId, productId);
   }
 

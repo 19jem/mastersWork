@@ -2,6 +2,26 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input AddItemInput {
+  product: ID!
+  quantity: Float!
+}
+
+type CartItemType {
+  product: ProductType!
+  quantity: Float!
+}
+
+type CartType {
+  _id: ID!
+  createdAt: DateTime!
+  items: [CartItemType!]!
+  totalPrice: Float!
+  updatedAt: DateTime!
+  user: UserType
+  userId: String!
+}
+
 type CategoryType {
   _id: ID!
   children: [CategoryType!]!
@@ -38,6 +58,12 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
+  """Додати товар в кошик"""
+  addItemToCart(input: AddItemInput!, userId: ID!): CartType!
+
+  """Очистити кошик"""
+  clearCart(userId: ID!): Boolean!
+
   """Створити нову категорію"""
   createCategory(input: CreateCategoryInput!): CategoryType!
   createProduct(input: CreateProductDto!): ProductType!
@@ -51,6 +77,12 @@ type Mutation {
 
   """Видалити користувача"""
   deleteUser(id: ID!): Boolean!
+
+  """Видалити товар з кошика"""
+  removeCartItem(productId: ID!, userId: ID!): CartType!
+
+  """Оновити кількість товару в кошику"""
+  updateCartItem(productId: ID!, quantity: Int!, userId: ID!): CartType!
 
   """Оновити категорію"""
   updateCategory(id: ID!, input: UpdateCategoryInput!): CategoryType!
@@ -71,6 +103,9 @@ type ProductType {
 }
 
 type Query {
+  """Отримати кошик користувача"""
+  cart(userId: ID!): CartType!
+
   """Отримати всі категорії"""
   categories: [CategoryType!]!
 
