@@ -37,6 +37,10 @@ input CreateCategoryInput {
   parent: ID
 }
 
+input CreateOrderInput {
+  userId: ID!
+}
+
 input CreateProductDto {
   category: String
   description: String!
@@ -66,6 +70,9 @@ type Mutation {
 
   """Створити нову категорію"""
   createCategory(input: CreateCategoryInput!): CategoryType!
+
+  """Створити замовлення з кошика"""
+  createOrder(input: CreateOrderInput!): OrderType!
   createProduct(input: CreateProductDto!): ProductType!
 
   """Створити нового користувача"""
@@ -86,10 +93,39 @@ type Mutation {
 
   """Оновити категорію"""
   updateCategory(id: ID!, input: UpdateCategoryInput!): CategoryType!
+
+  """Оновити статус замовлення"""
+  updateOrderStatus(id: ID!, status: OrderStatus!): OrderType!
   updateProduct(id: String!, input: UpdateProductDto!): ProductType!
 
   """Оновити користувача"""
   updateUser(id: ID!, input: UpdateUserInput!): UserType!
+}
+
+type OrderItemType {
+  name: String!
+  price: Float!
+  product: ProductType!
+  quantity: Float!
+}
+
+"""Статус замовлення"""
+enum OrderStatus {
+  COMPLETED
+  PAID
+  PENDING
+  SHIPPED
+}
+
+type OrderType {
+  _id: ID!
+  createdAt: DateTime!
+  items: [OrderItemType!]!
+  status: OrderStatus!
+  total: Float!
+  updatedAt: DateTime!
+  user: UserType
+  userId: String!
 }
 
 type ProductType {
@@ -117,6 +153,12 @@ type Query {
 
   """Отримати головні категорії (без parent)"""
   mainCategories: [CategoryType!]!
+
+  """Отримати одне замовлення"""
+  order(id: ID!): OrderType!
+
+  """Отримати всі замовлення користувача"""
+  orders(userId: ID!): [OrderType!]!
   product(id: String!): ProductType!
   products: [ProductType!]!
 

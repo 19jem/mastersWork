@@ -6,6 +6,8 @@ import { Order, OrderSchema } from './schemas/order.schema';
 import { Product, ProductSchema } from '../products/schemas/product.schema';
 import { Cart, CartSchema } from '../cart/schemas/cart.schema';
 import { CartService } from '../cart/cart.service';
+import { UsersModule } from '../users/users.module';
+import { OrdersResolver } from './orders.resolver';
 
 @Module({
   imports: [
@@ -14,9 +16,10 @@ import { CartService } from '../cart/cart.service';
       { name: Product.name, schema: ProductSchema },
       { name: Cart.name, schema: CartSchema },
     ]),
+    UsersModule
   ],
   controllers: [OrdersController],
-  providers: [OrdersService, CartService],
+  providers: [OrdersService, CartService, OrdersResolver],
   exports: [OrdersService],
 })
 export class OrdersModule {}
